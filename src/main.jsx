@@ -750,7 +750,7 @@ function Locations() {
   return (
     <section id="contact" className="section bg-charcoal">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
+        <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
           <div>
             <p className="eyebrow">Locations</p>
             <h2 className="heading mt-5">Serving Utah County.</h2>
