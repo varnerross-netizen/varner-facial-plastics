@@ -86,7 +86,15 @@ body {
   }
 
   .gallery-card {
-    @apply aspect-[3/4] overflow-hidden rounded-2xl bg-[#191713] p-3 shadow-glow;
+    @apply overflow-hidden rounded-2xl bg-[#191713] p-3 shadow-glow;
+  }
+
+  .trust-cell {
+    border-bottom: 1px solid rgba(245, 243, 239, 0.1);
+  }
+
+  .trust-cell:last-child {
+    border-bottom: 0;
   }
 
   .form-label {
@@ -163,7 +171,33 @@ body {
   }
 }
 
+@media (min-width: 640px) {
+  .trust-cell {
+    border-right: 1px solid rgba(245, 243, 239, 0.1);
+  }
+
+  .trust-cell:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .trust-cell:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+}
+
 @media (min-width: 1024px) {
+  .trust-cell {
+    border-bottom: 0;
+  }
+
+  .trust-cell:nth-child(2n) {
+    border-right: 1px solid rgba(245, 243, 239, 0.1);
+  }
+
+  .trust-cell:last-child {
+    border-right: 0;
+  }
+
   .hero-backdrop {
     background:
       linear-gradient(90deg, rgba(8, 8, 8, 1) 0 50%, rgba(24, 24, 24, 1) 50% 100%),

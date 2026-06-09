@@ -126,23 +126,28 @@ const process = [
 const galleryItems = [
   {
     title: "Upper Blepharoplasty & Brow Lift",
-    image: "/assets/gallery-upper-bleph-brow-lift.webp"
+    image: "/assets/gallery-upper-bleph-brow-lift.webp",
+    fullImage: "/assets/gallery-upper-bleph-brow-lift.png"
   },
   {
     title: "Isolated Deep Neck Lift",
-    image: "/assets/gallery-isolated-deep-neck-lift.webp"
+    image: "/assets/gallery-isolated-deep-neck-lift.webp",
+    fullImage: "/assets/gallery-isolated-deep-neck-lift.png"
   },
   {
     title: "Rhinoplasty",
-    image: "/assets/gallery-rhinoplasty.webp"
+    image: "/assets/gallery-rhinoplasty.webp",
+    fullImage: "/assets/gallery-rhinoplasty.png"
   },
   {
     title: "Isolated Deep Neck Lift",
-    image: "/assets/gallery-isolated-deep-neck-lift-2.webp"
+    image: "/assets/gallery-isolated-deep-neck-lift-2.webp",
+    fullImage: "/assets/gallery-isolated-deep-neck-lift-2.png"
   },
   {
     title: "Upper Blepharoplasty",
-    image: "/assets/gallery-upper-blepharoplasty.webp"
+    image: "/assets/gallery-upper-blepharoplasty.webp",
+    fullImage: "/assets/gallery-upper-blepharoplasty.png"
   }
 ];
 
@@ -444,13 +449,13 @@ function ImageFallback({ src, alt, className, fallbackClassName, label }) {
 
 function TrustBar() {
   return (
-    <section className="bg-charcoal px-3 pb-12 text-charcoal sm:px-5">
-      <div className="mx-auto -mt-8 grid max-w-7xl divide-y divide-charcoal/10 rounded-2xl bg-ivory px-5 py-8 shadow-glow sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4 lg:px-8">
+    <section className="bg-charcoal px-3 pb-12 text-ivory sm:px-5">
+      <div className="trust-grid mx-auto -mt-8 grid max-w-7xl overflow-hidden rounded-2xl border border-ivory/10 bg-[#2b2926] px-5 py-8 shadow-glow sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
         {credentials.map(([title, subtitle]) => (
-          <div key={title} className="px-0 py-5 text-center sm:px-7 lg:px-9">
-            <p className="font-serif text-3xl leading-tight lg:text-4xl">{title}</p>
+          <div key={title} className="trust-cell flex min-h-[190px] flex-col items-center justify-center px-0 py-5 text-center sm:px-7 lg:min-h-[210px] lg:px-9">
+            <p className="font-serif text-3xl leading-tight text-ivory lg:text-4xl">{title}</p>
             {subtitle && (
-              <p className="mt-4 text-xs font-semibold uppercase tracking-[0.25em] text-charcoal/45">{subtitle}</p>
+              <p className="mt-4 text-xs font-semibold uppercase tracking-[0.25em] text-taupe">{subtitle}</p>
             )}
           </div>
         ))}
@@ -627,6 +632,8 @@ function LegalModal({ document, onClose }) {
 }
 
 function Gallery() {
+  const [activeGalleryItem, setActiveGalleryItem] = useState(null);
+
   return (
     <section id="gallery" className="section border-y border-line bg-[#12110f]">
       <div className="mx-auto grid max-w-7xl gap-12 px-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:px-8">
@@ -642,19 +649,25 @@ function Gallery() {
           {galleryItems.map((item, index) => (
             <div key={`${item.title}-${index}`} className="gallery-card">
               {item.image ? (
-                <div className="flex h-full flex-col overflow-hidden rounded-xl border border-line bg-charcoal">
-                  <div className="border-b border-line bg-[#0d0d0d] p-4">
-                    <span className="block font-serif text-2xl leading-tight text-ivory">{item.title}</span>
+                <button
+                  type="button"
+                  className="group block h-full w-full overflow-hidden rounded-xl border border-line bg-charcoal text-left transition duration-300 hover:border-taupe/70 focus:outline-none focus:ring-2 focus:ring-taupe focus:ring-offset-2 focus:ring-offset-charcoal"
+                  onClick={() => setActiveGalleryItem(item)}
+                >
+                  <div className="border-b border-line bg-[#0d0d0d] px-4 py-3">
+                    <span className="block min-h-[3.25rem] font-serif text-[1.7rem] leading-none text-ivory sm:text-2xl">{item.title}</span>
                   </div>
-                  <img
-                    src={item.image}
-                    alt={`${item.title} before and after result`}
-                    className="min-h-0 flex-1 object-cover"
-                    loading="lazy"
-                    width="1080"
-                    height="1350"
-                  />
-                </div>
+                  <div className="aspect-[4/5] bg-black">
+                    <img
+                      src={item.image}
+                      alt={`${item.title} before and after result`}
+                      className="h-full w-full object-contain"
+                      loading="lazy"
+                      width="1080"
+                      height="1350"
+                    />
+                  </div>
+                </button>
               ) : (
                 <div className="h-full rounded-xl border border-line bg-gradient-to-br from-ivory/10 to-taupe/10 p-5">
                   <span className="block text-xs uppercase tracking-[0.24em] text-mist">{item.title}</span>
@@ -664,7 +677,50 @@ function Gallery() {
           ))}
         </div>
       </div>
+      {activeGalleryItem && (
+        <GalleryModal item={activeGalleryItem} onClose={() => setActiveGalleryItem(null)} />
+      )}
     </section>
+  );
+}
+
+function GalleryModal({ item, onClose }) {
+  return (
+    <div
+      className="fixed inset-0 z-[90] grid place-items-center bg-charcoal/85 px-4 py-6 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="gallery-title"
+      onClick={onClose}
+    >
+      <div
+        className="relative max-h-[calc(100vh-3rem)] w-full max-w-5xl overflow-hidden rounded-2xl border border-line bg-[#090909] shadow-glow"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <button
+          type="button"
+          className="absolute right-4 top-4 z-10 grid h-11 w-11 place-items-center rounded-full border border-ivory/20 bg-charcoal/80 text-ivory/75 transition hover:border-taupe hover:text-ivory"
+          aria-label="Close gallery image"
+          onClick={onClose}
+        >
+          <X size={20} />
+        </button>
+        <div className="border-b border-line px-5 py-4 sm:px-7">
+          <h3 id="gallery-title" className="pr-14 font-serif text-3xl leading-tight text-ivory sm:text-4xl">
+            {item.title}
+          </h3>
+        </div>
+        <div className="max-h-[calc(100vh-9.5rem)] overflow-auto bg-black p-2 sm:p-4">
+          <img
+            src={item.fullImage ?? item.image}
+            alt={`${item.title} before and after result enlarged`}
+            className="mx-auto max-h-[calc(100vh-12rem)] w-auto max-w-full object-contain"
+            width="1080"
+            height="1350"
+          />
+        </div>
+      </div>
+    </div>
   );
 }
 
